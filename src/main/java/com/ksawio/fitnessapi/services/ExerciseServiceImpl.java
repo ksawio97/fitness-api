@@ -2,7 +2,6 @@ package com.ksawio.fitnessapi.services;
 
 import com.ksawio.fitnessapi.entities.Exercise;
 import com.ksawio.fitnessapi.repositories.ExerciseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
