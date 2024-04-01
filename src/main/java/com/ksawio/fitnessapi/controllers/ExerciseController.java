@@ -27,4 +27,9 @@ public class ExerciseController {
     public ResponseEntity<List<Exercise>> findAll() {
         return ResponseEntity.ok(exerciseService.findAll());
     }
+
+    @GetMapping("/body-part/{id}")
+    public ResponseEntity<List<Exercise>> findByBodyPartId(@PathVariable Long id) {
+        return ResponseEntity.ok(exerciseService.findByBodyPartId(id));
+    }
 }

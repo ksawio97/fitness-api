@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface ExerciseService {
     Optional<Exercise> findById(Long id);
     List<Exercise> findAll();
+
+    List<Exercise> findByBodyPartId(Long id);
 }

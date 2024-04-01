@@ -1,5 +1,6 @@
 package com.ksawio.fitnessapi.entities;
 
+import com.ksawio.fitnessapi.utils.Difficulty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,9 +15,19 @@ import java.util.List;
 @Builder
 public class Exercise {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String title;
+
+    @Enumerated
+    private Difficulty difficulty;
+
     @ElementCollection
+    @OrderColumn(name = "instruction_order")
+    @Column(name = "instruction")
     private List<String> instructions;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "bodyPart_id", referencedColumnName = "id")
+    private BodyPart bodyPart;
 }
