@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "custom.security.allowed_origins",
+      "type": "java.lang.String",
+      "description": "Allowed origins for all api endpoints. You can provide multiple origins by seperating them with:,"
+  }
+] }
