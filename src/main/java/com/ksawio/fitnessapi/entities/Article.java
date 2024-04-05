@@ -21,7 +21,7 @@ public class Article {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 3_000)
     private String content;
 
     @Column(nullable = false)

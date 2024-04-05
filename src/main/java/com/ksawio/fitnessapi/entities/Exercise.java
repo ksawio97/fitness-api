@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -29,7 +30,10 @@ public class Exercise {
     @Column(name = "instruction")
     private List<String> instructions;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "bodyPart_id", referencedColumnName = "id")
-    private BodyPart bodyPart;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name="body_part_exercise",
+            joinColumns = @JoinColumn(name = "exercise_id"),
+            inverseJoinColumns = @JoinColumn(name = "body_part_id"))
+    private Set<BodyPart> bodyParts;
 }

@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
-    @Query("SELECT e FROM Exercise e WHERE e.bodyPart.id = :id")
+    @Query("SELECT e FROM Exercise e JOIN e.bodyParts bp WHERE bp.id = :id")
     List<Exercise> findByBodyPartId(@Param("id") Long id);
 }
