@@ -28,6 +28,6 @@ public class Article {
     private String author;
 
     @Column(name = "publish_date", nullable = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date publishDate;
 }
