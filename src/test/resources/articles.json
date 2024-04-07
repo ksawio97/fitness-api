@@ -1,0 +1,32 @@
+[
+  {
+    "title": "First Article",
+    "content": "This is the content of the first article.",
+    "author": "Author One",
+    "publishDate": "2024-04-06T10:00:00Z"
+  },
+  {
+    "title": "Second Article",
+    "content": "This is the content of the second article.",
+    "author": "Author Two",
+    "publishDate": "2024-04-06T11:00:00Z"
+  },
+  {
+    "title": "Third Article",
+    "content": "This is the content of the third article.",
+    "author": "Author Three",
+    "publishDate": "2024-04-06T12:00:00Z"
+  },
+  {
+    "title": "Fourth Article",
+    "content": "This is the content of the fourth article.",
+    "author": "Author Four",
+    "publishDate": "2024-04-06T13:00:00Z"
+  },
+  {
+    "title": "Fifth Article",
+    "content": "This is the content of the fifth article.",
+    "author": "Author Five",
+    "publishDate": "2024-04-06T14:00:00Z"
+  }
+]

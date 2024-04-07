@@ -1,14 +1,14 @@
 package com.ksawio.fitnessapi.services;
 
 
-import com.ksawio.fitnessapi.entities.Exercise;
+import com.ksawio.fitnessapi.dto.ExerciseDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ExerciseService {
-    Optional<Exercise> findById(Long id);
-    List<Exercise> findAll();
+    Optional<ExerciseDto> findById(Long id);
+    List<ExerciseDto> findAll();
 
-    List<Exercise> findByBodyPartId(Long id);
+    List<ExerciseDto> findByBodyPartId(Long id);
 }

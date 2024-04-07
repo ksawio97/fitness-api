@@ -1,4 +1,5 @@
 package com.ksawio.fitnessapi.entities;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

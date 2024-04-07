@@ -1,6 +1,6 @@
 package com.ksawio.fitnessapi.services;
 
-import com.ksawio.fitnessapi.entities.Exercise;
+import com.ksawio.fitnessapi.dto.ExerciseDto;
 import com.ksawio.fitnessapi.repositories.ExerciseRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +16,18 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public Optional<Exercise> findById(Long id) {
-        return repository.findById(id);
+    public Optional<ExerciseDto> findById(Long id) {
+        final var found = repository.findById(id);
+        return found.map(ExerciseDto::createFromExercise);
     }
 
     @Override
-    public List<Exercise> findAll() {
-        return repository.findAll();
+    public List<ExerciseDto> findAll() {
+        return repository.findAll().stream().map(ExerciseDto::createFromExercise).toList();
     }
 
     @Override
-    public List<Exercise> findByBodyPartId(Long id) {
-        return repository.findByBodyPartId(id);
+    public List<ExerciseDto> findByBodyPartId(Long id) {
+        return repository.findByBodyPartId(id).stream().map(ExerciseDto::createFromExercise).toList();
     }
 }

@@ -1,7 +1,7 @@
 package com.ksawio.fitnessapi.repositories;
 
 import com.ksawio.fitnessapi.entities.Article;
-import com.ksawio.fitnessapi.test_utils.DateUtils;
+import com.ksawio.fitnessapi.test_utils.LoadTestData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -40,33 +41,8 @@ class ArticleRepositoryTest {
     }
 
     @BeforeEach
-    void setUp() {
-        articles = List.of(Article.builder()
-                .title("First Article")
-                .content("This is the content of the first article.")
-                .author("Author One")
-                .publishDate(DateUtils.randomDate())
-                .build(), Article.builder()
-                .title("Second Article")
-                .content("This is the content of the second article.")
-                .author("Author Two")
-                .publishDate(DateUtils.randomDate())
-                .build(), Article.builder()
-                .title("Third Article")
-                .content("This is the content of the third article.")
-                .author("Author Three")
-                .publishDate(DateUtils.randomDate())
-                .build(), Article.builder()
-                .title("Fourth Article")
-                .content("This is the content of the fourth article.")
-                .author("Author Four")
-                .publishDate(DateUtils.randomDate())
-                .build(), Article.builder()
-                .title("Fifth Article")
-                .content("This is the content of the fifth article.")
-                .author("Author Five")
-                .publishDate(DateUtils.randomDate())
-                .build());
+    void setUp() throws IOException {
+        articles = LoadTestData.loadListData("articles.json", Article.class);
 
         articleRepository.saveAll(articles);
     }

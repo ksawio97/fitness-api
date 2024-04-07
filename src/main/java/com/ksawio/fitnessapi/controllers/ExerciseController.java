@@ -1,11 +1,14 @@
 package com.ksawio.fitnessapi.controllers;
 
-import com.ksawio.fitnessapi.entities.Exercise;
+import com.ksawio.fitnessapi.dto.ExerciseDto;
 import com.ksawio.fitnessapi.services.ExerciseService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -17,19 +20,19 @@ public class ExerciseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Exercise> findById(@PathVariable Long id) {
-        Optional<Exercise> retrievedExercise = exerciseService.findById(id);
+    public ResponseEntity<ExerciseDto> findById(@PathVariable Long id) {
+        Optional<ExerciseDto> retrievedExercise = exerciseService.findById(id);
 
         return retrievedExercise.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
-    public ResponseEntity<List<Exercise>> findAll() {
+    public ResponseEntity<List<ExerciseDto>> findAll() {
         return ResponseEntity.ok(exerciseService.findAll());
     }
 
     @GetMapping("/body-part/{id}")
-    public ResponseEntity<List<Exercise>> findByBodyPartId(@PathVariable Long id) {
+    public ResponseEntity<List<ExerciseDto>> findByBodyPartId(@PathVariable Long id) {
         return ResponseEntity.ok(exerciseService.findByBodyPartId(id));
     }
 }

@@ -1,0 +1,40 @@
+[
+  {
+    "title": "Push-up",
+    "difficulty": "MEDIUM",
+    "instructions": [
+      "Start in a plank position with your hands shoulder-width apart.",
+      "Lower your body until your chest nearly touches the floor.",
+      "Push yourself back up to the starting position."
+    ],
+    "bodyParts": [
+      {
+        "name": "Chest"
+      },
+      {
+        "name": "Arms"
+      },
+      {
+        "name": "Shoulders"
+      }
+    ]
+  },
+  {
+    "title": "Squats",
+    "difficulty": "EASY",
+    "instructions": [
+      "Stand with your feet shoulder-width apart.",
+      "Lower your body as if you were sitting back into a chair.",
+      "Keep your chest up and your core engaged.",
+      "Push through your heels to return to the starting position."
+    ],
+    "bodyParts": [
+      {
+        "name": "Legs"
+      },
+      {
+        "name": "Glutes"
+      }
+    ]
+  }
+]
