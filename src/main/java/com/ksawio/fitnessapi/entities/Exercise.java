@@ -1,11 +1,9 @@
 package com.ksawio.fitnessapi.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ksawio.fitnessapi.utils.Difficulty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 import java.util.Set;
@@ -15,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = {"bodyParts"})
 public class Exercise {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -36,5 +35,6 @@ public class Exercise {
             name="body_part_exercise",
             joinColumns = @JoinColumn(name = "exercise_id"),
             inverseJoinColumns = @JoinColumn(name = "body_part_id"))
+    @JsonIgnoreProperties("exercises")
     private Set<BodyPart> bodyParts;
 }

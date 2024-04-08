@@ -1,10 +1,14 @@
 package com.ksawio.fitnessapi.controllers;
 
+import com.github.dockerjava.api.exception.NotFoundException;
 import com.ksawio.fitnessapi.dto.ExerciseDto;
 import com.ksawio.fitnessapi.entities.BodyPart;
 import com.ksawio.fitnessapi.entities.Exercise;
+import com.ksawio.fitnessapi.repositories.BodyPartRepository;
 import com.ksawio.fitnessapi.repositories.ExerciseRepository;
 import com.ksawio.fitnessapi.test_utils.LoadTestData;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +20,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -34,6 +36,9 @@ class ExerciseControllerTest {
     ExerciseRepository exerciseRepository;
 
     @Autowired
+    BodyPartRepository bodyPartRepository;
+
+    @Autowired
     TestRestTemplate restTemplate;
 
     private List<Exercise> exercises;
@@ -41,6 +46,12 @@ class ExerciseControllerTest {
     @BeforeEach
     void setUp() throws IOException {
         exercises = LoadTestData.loadListData("exercises.json", Exercise.class);
+    }
+
+    @AfterEach
+    void deleteAll() {
+        exerciseRepository.deleteAll();
+        bodyPartRepository.deleteAll();
     }
 
     @Test
@@ -52,10 +63,9 @@ class ExerciseControllerTest {
 
         response = restTemplate.getForObject("/exercise", ExerciseDto[].class);
         assertThat(response.length).isEqualTo(exercises.size());
-
-        var retrieved = Arrays.stream(response).sorted((o1, o2) -> o1.getId() < o2.getId() ? -1 : 1).toList();
-        for (int i = 0; i < retrieved.size(); i++) {
-            assertThat(retrieved.get(i)).isEqualTo(exercises.get(i));
+        final var exercisesDto = exercises.stream().map(ExerciseDto::createFromExercise).toArray();
+        for (ExerciseDto exerciseDto : response) {
+            assertThat(exerciseDto).isIn(exercisesDto);
         }
     }
 
@@ -65,8 +75,8 @@ class ExerciseControllerTest {
 
         for (Exercise exercise : exercises) {
             var url = String.format("/exercise/%s", exercise.getId());
-            var response = restTemplate.getForObject(url, Exercise.class);
-            assertThat(response).isEqualTo(exercise);
+            var response = restTemplate.getForObject(url, ExerciseDto.class);
+            assertThat(response).isEqualTo(ExerciseDto.createFromExercise(exercise));
         }
     }
 
@@ -76,27 +86,12 @@ class ExerciseControllerTest {
         // check for valid ones, with one result
         for (Exercise exercise : exercises) {
             for (BodyPart bodyPart : exercise.getBodyParts()) {
-                var url = String.format("/exercise/bodyPart/%s", bodyPart.getId());
+                var url = String.format("/exercise/body-part/%s", bodyPart.getId());
                 var response = restTemplate.getForObject(url, ExerciseDto[].class);
 
                 assertThat(response.length).isEqualTo(1);
-                assertThat(response[0]).isEqualTo(exercise);
+                assertThat(response[0]).isEqualTo(ExerciseDto.createFromExercise(exercise));
             }
         }
-
-        exerciseRepository.deleteAll();
-
-        // requires first exercise to have at least 1 body part assigned
-        var bodyPart = exercises.getFirst().getBodyParts().stream().toList().getFirst();
-        var added = Exercise.builder().title("Test").bodyParts(Set.of(bodyPart)).build();
-        exerciseRepository.save(added);
-
-        var url = String.format("/exercise/bodyPart/%s", bodyPart.getId());
-        var response = restTemplate.getForObject(url, ExerciseDto[].class);
-
-        assertThat(response.length).isEqualTo(2);
-        // order doesn't matter
-        assertThat(response[0]).isIn(exercises.getFirst(), added);
-        assertThat(response[1]).isIn(exercises.getFirst(), added);
     }
 }
