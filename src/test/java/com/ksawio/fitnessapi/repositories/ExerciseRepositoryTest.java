@@ -1,5 +1,6 @@
 package com.ksawio.fitnessapi.repositories;
 
+import com.ksawio.fitnessapi.config.PostgreSQLContainerConfiguration;
 import com.ksawio.fitnessapi.entities.BodyPart;
 import com.ksawio.fitnessapi.entities.Exercise;
 import com.ksawio.fitnessapi.test_utils.LoadTestData;
@@ -9,9 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
+import org.springframework.context.annotation.Import;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
@@ -22,12 +21,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @Testcontainers
 @DataJpaTest
 @AutoConfigureTestDatabase(replace =  AutoConfigureTestDatabase.Replace.NONE)
+@Import(PostgreSQLContainerConfiguration.class)
 class ExerciseRepositoryTest {
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgres =
-            new PostgreSQLContainer<>("postgres:16.2-alpine");
-
     private List<Exercise> exercises;
 
     @Autowired

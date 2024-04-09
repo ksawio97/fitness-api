@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/exercise")
+@RequestMapping("/api/exercise")
 public class ExerciseController {
     private final ExerciseService exerciseService;
     public ExerciseController(final ExerciseService exerciseService) {

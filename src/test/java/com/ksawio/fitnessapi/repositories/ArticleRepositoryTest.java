@@ -1,5 +1,6 @@
 package com.ksawio.fitnessapi.repositories;
 
+import com.ksawio.fitnessapi.config.PostgreSQLContainerConfiguration;
 import com.ksawio.fitnessapi.dto.ArticleDto;
 import com.ksawio.fitnessapi.entities.Article;
 import com.ksawio.fitnessapi.test_utils.LoadTestData;
@@ -9,11 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
@@ -25,22 +24,12 @@ import static org.junit.jupiter.api.Assertions.fail;
 @Testcontainers
 @DataJpaTest
 @AutoConfigureTestDatabase(replace =  AutoConfigureTestDatabase.Replace.NONE)
+@Import(PostgreSQLContainerConfiguration.class)
 class ArticleRepositoryTest {
-    @Container
-    @ServiceConnection
-    static PostgreSQLContainer<?> postgres =
-            new PostgreSQLContainer<>("postgres:16.2-alpine");
-
     private List<Article> articles;
 
     @Autowired
     ArticleRepository articleRepository;
-
-    @Test
-    void connectionEstablished() {
-        assertThat(postgres.isCreated()).isTrue();
-        assertThat(postgres.isRunning()).isTrue();
-    }
 
     @BeforeEach
     void setUp() throws IOException {
