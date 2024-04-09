@@ -1,7 +1,9 @@
 package com.ksawio.fitnessapi.repositories;
 
+import com.ksawio.fitnessapi.dto.ArticleDto;
 import com.ksawio.fitnessapi.entities.Article;
 import com.ksawio.fitnessapi.test_utils.LoadTestData;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +49,14 @@ class ArticleRepositoryTest {
         articleRepository.saveAll(articles);
     }
 
+    @AfterEach
+    void deleteAll() {
+        articleRepository.deleteAll();
+    }
+
     @Test
     void shouldReturnLastArticle() {
-        List<Article> result = articleRepository.findLast(PageRequest.of(0, 1));
+        var result = articleRepository.findLast(PageRequest.of(0, 1));
         assertThat(result.size()).isEqualTo(1);
 
         final var lastArticle = articles.stream().min((o1, o2) -> {
@@ -60,12 +67,12 @@ class ArticleRepositoryTest {
         if (lastArticle.isEmpty()) {
             fail("lastArticle wasn't found in test class variable");
         }
-        assertThat(result.getFirst()).isEqualTo(lastArticle.get());
+        assertThat(result.getFirst()).isEqualTo(ArticleDto.createFromArticle(lastArticle.get()));
     }
 
     @Test
     void shouldReturnLastArticles() {
-        final List<Article> result = articleRepository.findLast(Pageable.unpaged());
+        final var result = articleRepository.findLast(Pageable.unpaged());
         assertThat(result.size()).isEqualTo(articles.size());
 
         final var lastArticles = articles.stream().sorted((o1, o2) -> {
@@ -75,7 +82,7 @@ class ArticleRepositoryTest {
         }).toList();
 
         for (int i = 0; i < result.size(); i++) {
-            assertThat(result.get(i)).isEqualTo(lastArticles.get(i));
+            assertThat(result.get(i)).isEqualTo(ArticleDto.createFromArticle(lastArticles.get(i)));
         }
     }
 }

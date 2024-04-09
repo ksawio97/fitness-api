@@ -1,8 +1,10 @@
 package com.ksawio.fitnessapi.controllers;
 
+import com.ksawio.fitnessapi.dto.ArticleDto;
 import com.ksawio.fitnessapi.entities.Article;
 import com.ksawio.fitnessapi.repositories.ArticleRepository;
 import com.ksawio.fitnessapi.test_utils.LoadTestData;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,27 +38,43 @@ class ArticleControllerTest {
     @BeforeEach
     void setUp() throws IOException {
         articles = LoadTestData.loadListData("articles.json", Article.class);
+
+        articleRepository.saveAll(articles);
+    }
+
+    @AfterEach
+    void deleteAll() {
+        articleRepository.deleteAll();
     }
 
     @Test
     void shouldReturnEmptyList() {
-        var response = restTemplate.getForObject("/article", Article[].class);
+        articleRepository.deleteAll();
+        var response = restTemplate.getForObject("/article", ArticleDto[].class);
         assertThat(response.length).isEqualTo(0);
 
-        response = restTemplate.getForObject("/article/2", Article[].class);
+        response = restTemplate.getForObject("/article/2", ArticleDto[].class);
         assertThat(response.length).isEqualTo(0);
     }
 
     @Test
     void shouldReturnList() {
-        articleRepository.saveAll(articles);
-
-        var response = restTemplate.getForObject("/article", Article[].class);
+        var response = restTemplate.getForObject("/article", ArticleDto[].class);
         assertThat(response.length).isEqualTo(articles.size());
+        //noinspection ComparatorMethodParameterNotUsed
         var retrieved = Arrays.stream(response).sorted((o1, o2) -> o1.getId() < o2.getId() ? -1 : 1).toList();
 
         for (int i = 0; i < retrieved.size(); i++) {
-            assertThat(retrieved.get(i)).isEqualTo(articles.get(i));
+            assertThat(retrieved.get(i)).isEqualTo(ArticleDto.createFromArticle(articles.get(i)));
+        }
+    }
+
+    @Test
+    void shouldReturnById() {
+        for (var article : articles) {
+            var url = String.format("/article/id/%s", article.getId());
+            var response = restTemplate.getForObject(url, Article.class);
+            assertThat(response).isEqualTo(article);
         }
     }
 }

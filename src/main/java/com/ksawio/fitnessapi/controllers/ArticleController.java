@@ -1,5 +1,6 @@
 package com.ksawio.fitnessapi.controllers;
 
+import com.ksawio.fitnessapi.dto.ArticleDto;
 import com.ksawio.fitnessapi.entities.Article;
 import com.ksawio.fitnessapi.services.ArticleService;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +17,20 @@ public class ArticleController {
         this.service = service;
     }
 
-    // TODO change so this endpoint only returns basic data
     @GetMapping
-    public ResponseEntity<List<Article>> findLast() {
+    public ResponseEntity<List<ArticleDto>> findLast() {
         return ResponseEntity.ok(service.findLast());
     }
 
-    // TODO change so this endpoint only returns basic data
     @GetMapping("/{limit}")
-    public ResponseEntity<List<Article>> findLastLimit(@PathVariable int limit) {
+    public ResponseEntity<List<ArticleDto>> findLastLimit(@PathVariable int limit) {
         return ResponseEntity.ok(service.findLast(limit));
     }
 
-    // TODO add endpoint witch will get article with full data about it
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Article> findLastLimit(@PathVariable long id) {
+        var retrievedArticle = service.findById(id);
+
+        return retrievedArticle.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

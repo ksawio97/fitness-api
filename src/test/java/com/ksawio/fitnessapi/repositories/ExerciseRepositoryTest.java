@@ -3,6 +3,7 @@ package com.ksawio.fitnessapi.repositories;
 import com.ksawio.fitnessapi.entities.BodyPart;
 import com.ksawio.fitnessapi.entities.Exercise;
 import com.ksawio.fitnessapi.test_utils.LoadTestData;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,14 @@ class ExerciseRepositoryTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        exercises = LoadTestData.loadListData("exercises.json", Exercise.class);
+        exercises = LoadTestData.loadListData("exercises-body-parts.json", Exercise.class);
 
         exerciseRepository.saveAll(exercises);
+    }
+
+    @AfterEach
+    void deleteAll() {
+        exerciseRepository.deleteAll();
     }
 
     @Test

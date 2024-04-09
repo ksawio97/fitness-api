@@ -1,13 +1,10 @@
 package com.ksawio.fitnessapi.controllers;
 
-import com.github.dockerjava.api.exception.NotFoundException;
 import com.ksawio.fitnessapi.dto.ExerciseDto;
 import com.ksawio.fitnessapi.entities.BodyPart;
 import com.ksawio.fitnessapi.entities.Exercise;
-import com.ksawio.fitnessapi.repositories.BodyPartRepository;
 import com.ksawio.fitnessapi.repositories.ExerciseRepository;
 import com.ksawio.fitnessapi.test_utils.LoadTestData;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,43 +33,39 @@ class ExerciseControllerTest {
     ExerciseRepository exerciseRepository;
 
     @Autowired
-    BodyPartRepository bodyPartRepository;
-
-    @Autowired
     TestRestTemplate restTemplate;
 
     private List<Exercise> exercises;
 
     @BeforeEach
     void setUp() throws IOException {
-        exercises = LoadTestData.loadListData("exercises.json", Exercise.class);
+        exercises = LoadTestData.loadListData("exercises-body-parts.json", Exercise.class);
+
+        exerciseRepository.saveAll(exercises);
     }
 
     @AfterEach
     void deleteAll() {
         exerciseRepository.deleteAll();
-        bodyPartRepository.deleteAll();
     }
 
     @Test
     void shouldReturnAll() {
         var response = restTemplate.getForObject("/exercise", ExerciseDto[].class);
-        assertThat(response.length).isEqualTo(0);
-
-        exerciseRepository.saveAll(exercises);
-
-        response = restTemplate.getForObject("/exercise", ExerciseDto[].class);
         assertThat(response.length).isEqualTo(exercises.size());
         final var exercisesDto = exercises.stream().map(ExerciseDto::createFromExercise).toArray();
         for (ExerciseDto exerciseDto : response) {
             assertThat(exerciseDto).isIn(exercisesDto);
         }
+
+        exerciseRepository.deleteAll(exercises);
+
+        response = restTemplate.getForObject("/exercise", ExerciseDto[].class);
+        assertThat(response.length).isEqualTo(0);
     }
 
     @Test
     void shouldReturnById() {
-        exerciseRepository.saveAll(exercises);
-
         for (Exercise exercise : exercises) {
             var url = String.format("/exercise/%s", exercise.getId());
             var response = restTemplate.getForObject(url, ExerciseDto.class);
@@ -82,7 +75,6 @@ class ExerciseControllerTest {
 
     @Test
     void shouldReturnByBodyPartId() {
-        exerciseRepository.saveAll(exercises);
         // check for valid ones, with one result
         for (Exercise exercise : exercises) {
             for (BodyPart bodyPart : exercise.getBodyParts()) {
