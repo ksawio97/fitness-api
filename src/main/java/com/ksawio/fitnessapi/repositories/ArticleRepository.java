@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
-    @Query("SELECT new com.ksawio.fitnessapi.dto.ArticleDto(a.id, a.title, a.author, a.publishDate) FROM Article a order by a.publishDate DESC")
+    @Query("SELECT new com.ksawio.fitnessapi.dto.ArticleDto(a) FROM Article a order by a.publishDate DESC")
     List<ArticleDto> findLast(Pageable pageable);
 }

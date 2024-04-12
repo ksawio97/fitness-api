@@ -1,9 +1,12 @@
 package com.ksawio.fitnessapi.services;
 
-import com.ksawio.fitnessapi.entities.BodyPart;
+import com.ksawio.fitnessapi.dto.BodyPartDto;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BodyPartService {
-    List<BodyPart> findAll();
+    List<BodyPartDto> findAll();
+
+    Optional<BodyPartDto> findByName(String name);
 }

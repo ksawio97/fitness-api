@@ -1,10 +1,11 @@
 package com.ksawio.fitnessapi.controllers;
 
 
-import com.ksawio.fitnessapi.entities.BodyPart;
+import com.ksawio.fitnessapi.dto.BodyPartDto;
 import com.ksawio.fitnessapi.services.BodyPartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,14 @@ public class BodyPartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BodyPart>> findAll() {
+    public ResponseEntity<List<BodyPartDto>> findAll() {
         return ResponseEntity.ok(bodyPartService.findAll());
+    }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<BodyPartDto> findByName(@PathVariable String name) {
+        final var bodyPart = bodyPartService.findByName(name);
+
+        return bodyPart.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

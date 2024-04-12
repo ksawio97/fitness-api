@@ -4,7 +4,6 @@ import com.ksawio.fitnessapi.entities.Article;
 import lombok.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -18,11 +17,11 @@ public class ArticleDto {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    public ArticleDto(Long id, String title, String author, Date publishDate) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.publishDate = dateFormat.format(publishDate);
+    public ArticleDto(Article article) {
+        this.id = article.getId();
+        this.title = article.getTitle();
+        this.author = article.getAuthor();
+        this.publishDate = dateFormat.format(article.getPublishDate());
     }
 
     public static ArticleDto createFromArticle(@NonNull Article article) {
