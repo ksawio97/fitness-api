@@ -24,6 +24,12 @@ public class BodyPartController {
         return ResponseEntity.ok(bodyPartService.findAll());
     }
 
+    @GetMapping("/id/{id}")
+    public ResponseEntity<BodyPartDto> findById(@PathVariable long id) {
+        final var retrievedBodyPart = bodyPartService.findById(id);
+
+        return retrievedBodyPart.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
     @GetMapping("/name/{name}")
     public ResponseEntity<BodyPartDto> findByName(@PathVariable String name) {
         final var bodyPart = bodyPartService.findByName(name);

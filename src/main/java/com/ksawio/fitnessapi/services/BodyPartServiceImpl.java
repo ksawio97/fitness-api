@@ -25,4 +25,10 @@ public class BodyPartServiceImpl implements BodyPartService {
         final var bodyPart = repository.findByName(name, PageRequest.of(0, 1));
         return bodyPart.get().findFirst();
     }
+
+    @Override
+    public Optional<BodyPartDto> findById(Long id) {
+        final var found = repository.findById(id);
+        return found.map(BodyPartDto::createFromBodyPart);
+    }
 }

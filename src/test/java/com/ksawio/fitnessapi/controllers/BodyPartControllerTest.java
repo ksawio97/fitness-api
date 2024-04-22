@@ -69,4 +69,23 @@ class BodyPartControllerTest {
         var response = restTemplate.getForEntity(url, BodyPartDto.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
+
+    @Test
+    void shouldReturnById() {
+        for (var bodyPart : bodyParts) {
+            var url = String.format("/api/body-part/id/%s", bodyPart.getId());
+            var response = restTemplate.getForObject(url, BodyPartDto.class);
+            assertThat(response).isEqualTo(BodyPartDto.createFromBodyPart(bodyPart));
+        }
+    }
+
+    @Test
+    void shouldReturnEmptyById() {
+        // expecting no body part to have id 0
+        final Long id = 0L;
+        final var url = String.format("/api/body-part/id/%s", id);
+
+        var response = restTemplate.getForEntity(url, BodyPartDto.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
 }

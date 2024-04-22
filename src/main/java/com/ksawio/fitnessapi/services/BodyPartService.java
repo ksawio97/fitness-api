@@ -9,4 +9,6 @@ public interface BodyPartService {
     List<BodyPartDto> findAll();
 
     Optional<BodyPartDto> findByName(String name);
+
+    Optional<BodyPartDto> findById(Long id);
 }

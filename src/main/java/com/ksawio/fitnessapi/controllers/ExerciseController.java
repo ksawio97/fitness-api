@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/exercise")
@@ -19,11 +20,17 @@ public class ExerciseController {
         this.exerciseService = exerciseService;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<ExerciseDto> findById(@PathVariable Long id) {
         Optional<ExerciseDto> retrievedExercise = exerciseService.findById(id);
 
         return retrievedExercise.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/ids/{ids}")
+    public ResponseEntity<List<ExerciseDto>> findAllById(@PathVariable Set<Long> ids) {
+        final var retrievedExercises = exerciseService.findAllById(ids);
+        return ResponseEntity.ok(retrievedExercises);
     }
 
     @GetMapping

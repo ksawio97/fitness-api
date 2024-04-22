@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ExerciseServiceImpl implements ExerciseService {
@@ -19,6 +20,11 @@ public class ExerciseServiceImpl implements ExerciseService {
     public Optional<ExerciseDto> findById(Long id) {
         final var found = repository.findById(id);
         return found.map(ExerciseDto::createFromExercise);
+    }
+
+    @Override
+    public List<ExerciseDto> findAllById(Set<Long> id) {
+        return repository.findAllById(id).stream().map(ExerciseDto::createFromExercise).toList();
     }
 
     @Override

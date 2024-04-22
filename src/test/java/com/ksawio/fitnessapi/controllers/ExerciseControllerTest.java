@@ -17,8 +17,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -79,7 +81,7 @@ class ExerciseControllerTest {
     @Test
     void shouldReturnById() {
         for (Exercise exercise : exercises) {
-            var url = String.format("/api/exercise/%s", exercise.getId());
+            var url = String.format("/api/exercise/id/%s", exercise.getId());
             var response = restTemplate.getForObject(url, ExerciseDto.class);
             assertThat(response).isEqualTo(ExerciseDto.createFromExercise(exercise));
         }
@@ -116,5 +118,18 @@ class ExerciseControllerTest {
 
         assertThat(bodyPart.getExercises().toArray()).contains(exercise);
         assertThat(exercise.getBodyParts().toArray()).contains(bodyPart);
+    }
+
+    @Test
+    void shouldReturnAllById() {
+        final var expected = new ArrayList<ExerciseDto>();
+        for (var exercise : exercises) {
+            expected.add(ExerciseDto.createFromExercise(exercise));
+            final var ids = expected.stream().map(ExerciseDto::getId).map(Object::toString).collect(Collectors.joining(","));
+            final var url = String.format("/api/exercise/ids/%s", ids);
+
+            var response = restTemplate.getForObject(url, ExerciseDto[].class);
+            assertThat(response).isEqualTo(expected.toArray());
+        }
     }
 }
