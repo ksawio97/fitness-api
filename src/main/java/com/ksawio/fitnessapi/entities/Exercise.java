@@ -13,7 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(exclude = {"bodyParts"})
+@EqualsAndHashCode(exclude = {"bodyParts", "mediaLinks"})
 public class Exercise {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -24,6 +24,10 @@ public class Exercise {
 
     @Enumerated
     private Difficulty difficulty;
+
+    @OneToOne(optional =  true)
+    @JoinColumn(name = "exercise_media_links_id", referencedColumnName = "id")
+    private ExerciseMediaLinks mediaLinks;
 
     @ElementCollection
     @OrderColumn(name = "instruction_order")

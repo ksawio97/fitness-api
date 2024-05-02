@@ -56,7 +56,7 @@ class ArticleRepositoryTest {
         if (lastArticle.isEmpty()) {
             fail("lastArticle wasn't found in test class variable");
         }
-        assertThat(result.getFirst()).isEqualTo(ArticleDto.createFromArticle(lastArticle.get()));
+        assertThat(result.get(0)).isEqualTo(ArticleDto.createFromArticle(lastArticle.get()));
     }
 
     @Test

@@ -53,7 +53,7 @@ class BodyPartControllerTest {
 
     @Test
     void shouldReturnByName() {
-        final var toFind = bodyParts.getFirst();
+        final var toFind = bodyParts.get(0);
         final var url = String.format("/api/body-part/name/%s", toFind.getName());
 
         var response = restTemplate.getForObject(url, BodyPartDto.class);

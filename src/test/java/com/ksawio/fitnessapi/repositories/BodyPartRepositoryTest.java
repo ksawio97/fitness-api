@@ -52,8 +52,8 @@ class BodyPartRepositoryTest {
     @Test
     void shouldReturnBodyPart() {
         // we assume this name is not in body parts
-        final var name = bodyParts.getFirst().getName();
+        final var name = bodyParts.get(0).getName();
         var result = bodyPartRepository.findByName(name, PageRequest.of(0, 1));
-        assertThat(result.iterator().next()).isEqualTo(BodyPartDto.createFromBodyPart(bodyParts.getFirst()));
+        assertThat(result.iterator().next()).isEqualTo(BodyPartDto.createFromBodyPart(bodyParts.get(0)));
     }
 }

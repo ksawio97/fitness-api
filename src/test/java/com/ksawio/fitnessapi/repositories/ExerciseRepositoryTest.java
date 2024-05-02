@@ -47,7 +47,7 @@ class ExerciseRepositoryTest {
                 var results = exerciseRepository.findByBodyPartId(bodyPart.getId());
 
                 assertThat(results.size()).isEqualTo(1);
-                assertThat(results.getFirst()).isEqualTo(exercise);
+                assertThat(results.get(0)).isEqualTo(exercise);
             }
         }
     }
